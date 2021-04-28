@@ -1,12 +1,12 @@
 ﻿namespace DataStructures.Models
 {
-    public class StructuredRecord
+    public class NestedNode
     {
         public char Name { get; }
         public int Lft { get; }
         public int Rgt { get; }
 
-        public StructuredRecord(char name, int lft, int rgt)
+        public NestedNode(char name, int lft, int rgt)
         {
             Name = name;
             Lft = lft;

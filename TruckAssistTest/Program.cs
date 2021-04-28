@@ -7,17 +7,17 @@ namespace DataStructures
     {
         public static void Main(string[] args)
         {
-            var parentChildArray = new ParentChildRecord[]
+            var parentChildArray = new ParentChildNode[]
             {
-                new ParentChildRecord('a', 1, null),
-                new ParentChildRecord('b', 2, 1),
-                new ParentChildRecord('c', 3, 1),
-                new ParentChildRecord('d', 4, 2),
-                new ParentChildRecord('e', 5, 3),
-                new ParentChildRecord('f', 6, 3),
-                new ParentChildRecord('g', 7, 2),
-                new ParentChildRecord('i', 8, 4),
-                new ParentChildRecord('j', 9, 8)
+                new ParentChildNode('a', 1, null),
+                new ParentChildNode('b', 2, 1),
+                new ParentChildNode('c', 3, 1),
+                new ParentChildNode('d', 4, 2),
+                new ParentChildNode('e', 5, 3),
+                new ParentChildNode('f', 6, 3),
+                new ParentChildNode('g', 7, 2),
+                new ParentChildNode('i', 8, 4),
+                new ParentChildNode('j', 9, 8)
             };
 
             Tree graph = new Tree(parentChildArray);

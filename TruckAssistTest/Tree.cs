@@ -6,16 +6,16 @@ namespace DataStructures
 {
     public class Tree
     {
-        private readonly ParentChildRecord[] _parentChildRecords;
+        private readonly ParentChildNode[] _parentChildNodes;
         private readonly bool[] _visited;
-        private readonly StructuredRecord[] _structuredRecords;
+        private readonly NestedNode[] _structuredNested;
         private static int visitCounter = 1;
 
-        public Tree(ParentChildRecord[] parentChildRecords)
+        public Tree(ParentChildNode[] parentChildNodes)
         {
-            _parentChildRecords = parentChildRecords;
-            _visited = new bool[_parentChildRecords.Length + 1];
-            _structuredRecords = new StructuredRecord[_parentChildRecords.Length + 1];
+            _parentChildNodes = parentChildNodes;
+            _visited = new bool[_parentChildNodes.Length + 1];
+            _structuredNested = new NestedNode[_parentChildNodes.Length + 1];
         }
 
         public Tree DepthFirstSearch()
@@ -23,56 +23,56 @@ namespace DataStructures
             return Traverse(Root);
         }
 
-        private Tree Traverse(ParentChildRecord record)
+        private Tree Traverse(ParentChildNode node)
         {
-            var stackForDFS = new Stack<ParentChildRecord>();
-            stackForDFS.Push(record);
-            _visited[record.Id] = true;
+            var inProgressNodes = new Stack<ParentChildNode>();
+            inProgressNodes.Push(node);
+            _visited[node.Id] = true;
 
             var left = visitCounter++;
 
-            while (stackForDFS.Count != 0)
+            while (inProgressNodes.Count != 0)
             {
-                var children = GetChildrenFor(record);
+                var children = GetChildrenFor(node);
 
                 if (children.Length == 0)
-                    _structuredRecords[record.Id] = new StructuredRecord(record.Name, left, visitCounter++);
+                    _structuredNested[node.Id] = new NestedNode(node.Name, left, visitCounter++);
 
                 foreach (var child in children)
                 {
                     Traverse(child);
 
-                    if (!AllChildrenVisited(record))
+                    if (!AllChildrenVisited(node))
                         continue;
 
-                    _structuredRecords[record.Id] = new StructuredRecord(record.Name, left, visitCounter++);
+                    _structuredNested[node.Id] = new NestedNode(node.Name, left, visitCounter++);
                 }
 
-                stackForDFS.Pop();
+                inProgressNodes.Pop();
             }
 
             return this;
         }
 
-        public IEnumerable<StructuredRecord> BuildHierarchicallyStructuredForm()
+        public IEnumerable<NestedNode> BuildHierarchicallyStructuredForm()
         {
-            return _structuredRecords
+            return _structuredNested
                         .Where(r => r != null)
                         .OrderBy(r => r.Name);
         }
 
-        private bool AllChildrenVisited(ParentChildRecord parent)
+        private bool AllChildrenVisited(ParentChildNode parentNode)
         {
-            var children = GetChildrenFor(parent);
+            var children = GetChildrenFor(parentNode);
             return children.All(c => _visited[c.Id]);
         }
 
-        private ParentChildRecord[] GetChildrenFor(ParentChildRecord parent)
+        private ParentChildNode[] GetChildrenFor(ParentChildNode parentNode)
         {
-            var children = _parentChildRecords.Where(record => record.ParentId == parent.Id).ToArray();
+            var children = _parentChildNodes.Where(childNode => childNode.ParentId == parentNode.Id).ToArray();
             return children;
         }
 
-        private ParentChildRecord Root => _parentChildRecords.FirstOrDefault(record => record.IsRoot);
+        private ParentChildNode Root => _parentChildNodes.FirstOrDefault(node => node.IsRoot);
     }
 }

@@ -1,12 +1,12 @@
 ﻿namespace DataStructures.Models
 {
-    public class ParentChildRecord
+    public class ParentChildNode
     {
         public char Name { get; }
         public int Id { get; }
         public int? ParentId { get; }
 
-        public ParentChildRecord(char name, int id, int? parentId)
+        public ParentChildNode(char name, int id, int? parentId)
         {
             Name = name;
             Id = id;
