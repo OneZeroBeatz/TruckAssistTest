@@ -24,9 +24,9 @@ namespace ExchangeRates.Clients
 
         }
 
-        public async Task<HttpResponseMessage> GetUsdOhlcExchangeRatesFor(DateTime startDate, string period, string symbols)
+        public async Task<HttpResponseMessage> GetOhlcExchangeRatesFor(string @base, DateTime startDate, string period, string symbols)
         {
-            string url = $"{ApiUrl}ohlc.json?app_id={ApiKey}&start={startDate.ToShortDateString()}&period={period}&symbols={symbols}";
+            string url = $"{ApiUrl}ohlc.json?app_id={ApiKey}&base={@base}&start={startDate.ToString("YYYY-MM-DDThh:mm:00Z")}&period={period}&symbols={symbols}&show_alternative=1";
             var httpClient = HttpClientFactory.Create();
             var httpResponseMessage = await httpClient.GetAsync(url);
             return httpResponseMessage;

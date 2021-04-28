@@ -25,7 +25,10 @@ namespace ExchangeRates
             IServiceProvider provider = serviceScope.ServiceProvider;
             var exchangeRateService = provider.GetRequiredService<ExchangeRateService>();
 
-            await exchangeRateService.AddExchangeRatesFor(new string[] { "EUR", "GBP" });
+            var currencySymbols = new string[] { "EUR", "GBP" };
+
+            await exchangeRateService.AddExchangeRatesFor(currencySymbols);
+            var exhc = await exchangeRateService.GetExchangeRatesForLastSevenDays(currencySymbols);
 
             await host.RunAsync();
         }

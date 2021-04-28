@@ -40,6 +40,25 @@ namespace ExchangeRates.Services
                 Console.WriteLine($"Cannot get exchange rates for USD to currencies: {string.Join(',', currencies)}, StatusCode: {httpResponseMessage.StatusCode}, Reason: {httpResponseMessage.ReasonPhrase}");
             }
         }
-       
+
+        public async Task<CurrencyOhlcExchangeRates> GetExchangeRatesForLastSevenDays(string[] currencies)
+        {
+            var httpResponseMessage = await _exchangeRateClient.GetOhlcExchangeRatesFor(BaseCurrencySymbol, DateTime.Now.AddDays(-7), "7d", string.Join(',', currencies));
+
+            if (httpResponseMessage.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                Console.WriteLine($"Cannot get exchange rates for last seven days, StatusCode: {httpResponseMessage.StatusCode}, Reason: {httpResponseMessage.ReasonPhrase}");
+                return null;
+            }
+
+            var content = httpResponseMessage.Content;
+            var currencyExchangeRates = await content.ReadAsAsync<CurrencyOhlcExchangeRates>();
+
+
+            Console.WriteLine("Press any key to exit");
+            Console.ReadLine();
+
+            return currencyExchangeRates;
+        }
     }
 }
