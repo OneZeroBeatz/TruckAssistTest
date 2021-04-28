@@ -13,6 +13,7 @@ namespace ExchangeRates.Services
     {
         private readonly OpenExchangeRatesClient _exchangeRateClient;
         private readonly IExchangeRateRepository _exchangeRateRepository;
+        private string BaseCurrencySymbol => "USD";
 
         public ExchangeRateService(OpenExchangeRatesClient exchangeRateClient,
                                    IExchangeRateRepository exchangeRateRepository)
@@ -21,9 +22,9 @@ namespace ExchangeRates.Services
             _exchangeRateRepository = exchangeRateRepository;
         }
 
-        public async Task AddUsdExchangeRatesFor(string [] currencies)
+        public async Task AddExchangeRatesFor(string [] currencies)
         {
-            var httpResponseMessage = await _exchangeRateClient.GetUsdExchangeRatesFor(string.Join(',', currencies));
+            var httpResponseMessage = await _exchangeRateClient.GetExchangeRatesFor(BaseCurrencySymbol, string.Join(',', currencies));
 
             if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -31,7 +32,7 @@ namespace ExchangeRates.Services
                 var currencyExchangeRates = await content.ReadAsAsync<CurrencyExchangeRates>();
                 foreach (var rate in currencyExchangeRates.Rates)
                 {
-                    _exchangeRateRepository.Add(new ExchangeRate("USD", rate.Key, rate.Value, DateTime.Now));
+                    _exchangeRateRepository.Add(new ExchangeRate(BaseCurrencySymbol, rate.Key, rate.Value, DateTime.Now));
                 }
             }
             else

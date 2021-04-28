@@ -25,7 +25,7 @@ namespace ExchangeRates
             IServiceProvider provider = serviceScope.ServiceProvider;
             var exchangeRateService = provider.GetRequiredService<ExchangeRateService>();
 
-            await exchangeRateService.AddUsdExchangeRatesFor(new string[] { "EUR", "GBP" });
+            await exchangeRateService.AddExchangeRatesFor(new string[] { "EUR", "GBP" });
 
             await host.RunAsync();
         }

@@ -15,9 +15,9 @@ namespace ExchangeRates.Clients
             ApiUrl = apiUrl;
         }
 
-        public async Task<HttpResponseMessage> GetUsdExchangeRatesFor(string symbols)
+        public async Task<HttpResponseMessage> GetExchangeRatesFor(string @base, string symbols)
         {
-            string url = $"{ApiUrl}latest.json?app_id={ApiKey}&symbols={symbols}";
+            string url = $"{ApiUrl}latest.json?app_id={ApiKey}&base={@base}&symbols={symbols}";
             var httpClient = HttpClientFactory.Create();
             var httpResponseMessage = await httpClient.GetAsync(url);
             return httpResponseMessage;
