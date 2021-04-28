@@ -1,4 +1,4 @@
-﻿namespace DataStructures
+﻿namespace TruckAssistTest.Models
 {
     public class ParentChildRecord
     {

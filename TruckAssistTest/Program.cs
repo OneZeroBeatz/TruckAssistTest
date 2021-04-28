@@ -1,5 +1,5 @@
-﻿using DataStructures;
-using System;
+﻿using System;
+using TruckAssistTest.Models;
 
 namespace TruckAssistTest
 {
@@ -22,7 +22,16 @@ namespace TruckAssistTest
 
             Tree graph = new Tree(parentChildArray);
 
-            graph.DepthFirstSearch();
+            var hierarchicallyStructuredRecords = graph
+                                                    .DepthFirstSearch()
+                                                    .BuildHierarchicallyStructuredForm();
+
+            Console.WriteLine("Name,\tlft,\trgt,");
+
+            foreach (var record in hierarchicallyStructuredRecords)
+            {
+                Console.WriteLine($"{record.Name},\t{record.Lft},\t{record.Rgt},");
+            }
 
             Console.ReadLine();
         }

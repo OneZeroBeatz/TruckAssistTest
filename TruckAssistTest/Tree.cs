@@ -1,7 +1,6 @@
-﻿using DataStructures;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using TruckAssistTest.Models;
 
 namespace TruckAssistTest
 {
@@ -9,31 +8,35 @@ namespace TruckAssistTest
     {
         private readonly ParentChildRecord[] _parentChildRecords;
         private readonly bool[] _visited;
+        private readonly StructuredRecord[] _structuredRecords;
         private static int visitCounter = 1;
 
         public Tree(ParentChildRecord[] parentChildRecords)
         {
             _parentChildRecords = parentChildRecords;
             _visited = new bool[_parentChildRecords.Length + 1];
+            _structuredRecords = new StructuredRecord[_parentChildRecords.Length + 1];
         }
 
-        private void Traverse(ParentChildRecord record)
+        public Tree DepthFirstSearch()
+        {
+            return Traverse(Root);
+        }
+
+        private Tree Traverse(ParentChildRecord record)
         {
             var stackForDFS = new Stack<ParentChildRecord>();
             stackForDFS.Push(record);
             _visited[record.Id] = true;
 
             var left = visitCounter++;
-            Console.WriteLine($"[{record.Name}] - left: {left}");
-            var right = 0;
 
             while (stackForDFS.Count != 0)
             {
                 var children = GetChildrenFor(record);
-                if (children.Length == 0) {
-                    right = visitCounter++;
-                    Console.WriteLine($"[{record.Name}] - right: {right}");
-                }
+
+                if (children.Length == 0)
+                    _structuredRecords[record.Id] = new StructuredRecord(record.Name, left, visitCounter++);
 
                 foreach (var child in children)
                 {
@@ -42,13 +45,20 @@ namespace TruckAssistTest
                     if (!AllChildrenVisited(record))
                         continue;
 
-                    right = visitCounter++;
-                    Console.WriteLine($"[{record.Name}] - right: {right}");
+                    _structuredRecords[record.Id] = new StructuredRecord(record.Name, left, visitCounter++);
                 }
 
                 stackForDFS.Pop();
             }
 
+            return this;
+        }
+
+        public IEnumerable<StructuredRecord> BuildHierarchicallyStructuredForm()
+        {
+            return _structuredRecords
+                        .Where(r => r != null)
+                        .OrderBy(r => r.Name);
         }
 
         private bool AllChildrenVisited(ParentChildRecord parent)
@@ -64,11 +74,5 @@ namespace TruckAssistTest
         }
 
         private ParentChildRecord Root => _parentChildRecords.FirstOrDefault(record => record.IsRoot);
-    
-        public void DepthFirstSearch()
-        {
-            Console.WriteLine("DFS");
-            Traverse(Root);
-        }
     }
 }
