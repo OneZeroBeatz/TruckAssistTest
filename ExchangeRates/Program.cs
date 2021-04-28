@@ -23,12 +23,15 @@ namespace ExchangeRates
 
             IServiceScope serviceScope = host.Services.CreateScope();
             IServiceProvider provider = serviceScope.ServiceProvider;
-            var exchangeRateService = provider.GetRequiredService<ExchangeRateService>();
+            var openExchangeRateService = provider.GetRequiredService<OpenExchangeRateService>();
+            var nbsExchangeRateService = provider.GetRequiredService<NbsExchangeRateService>();
 
             var currencySymbols = new string[] { "EUR", "GBP" };
 
-            await exchangeRateService.AddExchangeRatesFor(currencySymbols);
-            var exhc = await exchangeRateService.GetExchangeRatesForLastSevenDays(currencySymbols);
+            await openExchangeRateService.AddExchangeRatesFor(currencySymbols);
+            //await openExchangeRateService.GetExchangeRatesForLastSevenDays(currencySymbols);
+
+            await nbsExchangeRateService.CompareExchangeRates();
 
             await host.RunAsync();
         }
@@ -36,14 +39,17 @@ namespace ExchangeRates
 
         static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)
         {
-            var exchangeRateClientConfiguration = configuration.GetSection("ExchangeRateClient").Get<ExchangeRateClient>();
+            var openExchangeRateClientConfiguration = configuration.GetSection("OpenExchangeRateClient").Get<ExchangeRateClient>();
+            var nbsResenjeUrl = configuration.GetSection("NbsResenjeClient").GetValue<string>("ApiUrl");
 
             return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((_, services) =>
-                    services.AddTransient<ExchangeRateService, ExchangeRateService>()
-                            .AddTransient(provider => new OpenExchangeRatesClient(exchangeRateClientConfiguration.ApiKey, 
-                                                                                  exchangeRateClientConfiguration.ApiUrl))
-                            .AddTransient<IExchangeRateRepository, ExchangeRateRepository>());
+                    services.AddTransient<OpenExchangeRateService, OpenExchangeRateService>()
+                            .AddTransient<NbsExchangeRateService, NbsExchangeRateService>()
+                            .AddTransient(provider => new OpenExchangeRatesClient(openExchangeRateClientConfiguration.ApiKey,
+                                                                                  openExchangeRateClientConfiguration.ApiUrl))
+                            .AddTransient(provider => new NbsResenjeClient(nbsResenjeUrl))
+                            .AddSingleton<IExchangeRateRepository, ExchangeRateRepository>());
 
         }
     }

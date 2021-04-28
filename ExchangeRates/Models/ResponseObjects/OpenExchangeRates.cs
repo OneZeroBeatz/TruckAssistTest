@@ -2,7 +2,7 @@
 
 namespace ExchangeRates.Models.ResponseObjects
 {
-    public class CurrencyExchangeRates
+    public class OpenExchangeRates
     {
         public long Timestamp { get; set; }
         public string Base { get; set; }

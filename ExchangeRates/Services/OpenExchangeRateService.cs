@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace ExchangeRates.Services
 {
-    public class ExchangeRateService
+    public class OpenExchangeRateService
     {
         private readonly OpenExchangeRatesClient _exchangeRateClient;
         private readonly IExchangeRateRepository _exchangeRateRepository;
         private string BaseCurrencySymbol => "USD";
 
-        public ExchangeRateService(OpenExchangeRatesClient exchangeRateClient,
+        public OpenExchangeRateService(OpenExchangeRatesClient exchangeRateClient,
                                    IExchangeRateRepository exchangeRateRepository)
         {
             _exchangeRateClient = exchangeRateClient;
@@ -29,7 +29,7 @@ namespace ExchangeRates.Services
             if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var content = httpResponseMessage.Content;
-                var currencyExchangeRates = await content.ReadAsAsync<CurrencyExchangeRates>();
+                var currencyExchangeRates = await content.ReadAsAsync<OpenExchangeRates>();
                 foreach (var rate in currencyExchangeRates.Rates)
                 {
                     _exchangeRateRepository.Add(new ExchangeRate(BaseCurrencySymbol, rate.Key, rate.Value, DateTime.Now));

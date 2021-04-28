@@ -16,5 +16,10 @@ namespace ExchangeRates.Repositories
         {
             _exchangeRates.Add(exchangeRate);
         }
+
+        public IEnumerable<ExchangeRate> GetAll()
+        {
+            return new List<ExchangeRate>(_exchangeRates);
+        }
     }
 }
