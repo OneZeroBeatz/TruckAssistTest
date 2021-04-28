@@ -1,7 +1,7 @@
-﻿using System;
-using TruckAssistTest.Models;
+﻿using DataStructures.Models;
+using System;
 
-namespace TruckAssistTest
+namespace DataStructures
 {
     public class Program
     {
@@ -17,7 +17,7 @@ namespace TruckAssistTest
                 new ParentChildRecord('f', 6, 3),
                 new ParentChildRecord('g', 7, 2),
                 new ParentChildRecord('i', 8, 4),
-                new ParentChildRecord('j', 9, 8)           
+                new ParentChildRecord('j', 9, 8)
             };
 
             Tree graph = new Tree(parentChildArray);

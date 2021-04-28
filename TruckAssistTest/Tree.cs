@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using DataStructures.Models;
+using System.Collections.Generic;
 using System.Linq;
-using TruckAssistTest.Models;
 
-namespace TruckAssistTest
+namespace DataStructures
 {
     public class Tree
     {
