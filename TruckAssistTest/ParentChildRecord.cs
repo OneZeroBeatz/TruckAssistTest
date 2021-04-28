@@ -5,6 +5,7 @@
         public char Name { get; }
         public int Id { get; }
         public int? ParentId { get; }
+        public bool Visited { get; set; }
 
         public ParentChildRecord(char name, int id, int? parentId)
         {
